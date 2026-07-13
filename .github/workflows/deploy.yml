@@ -1,0 +1,29 @@
+name: Secure Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Triggers the runner whenever you push code to main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Download the repository code onto the runner
+      - name: Checkout Code 🛎️
+        uses: actions/checkout@v4
+
+      # Step 2: Swap the code placeholder with your secret key variable
+      - name: Inject Secure API Key 🔐
+        run: |
+          sed -i 's/WEATHER_API_KEY_PLACEHOLDER/${{ secrets.OPENWEATHER_API_KEY }}/g' script.js
+
+      # Step 3: Publish the folder live to the gh-pages hosting branch
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .
