@@ -1,20 +1,114 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ... (All your existing constant declarations remain the same) ...
+  const themeBtn = document.getElementById('theme-btn');
+  const resumeForm = document.getElementById('resume-form');
+  const visitorNameInput = document.getElementById('visitor-name');
+  const formFeedback = document.getElementById('form-feedback');
+
+  const widgetSearchBtn = document.getElementById('widget-search-btn');
+  const widgetCityInput = document.getElementById('widget-city');
+  const widgetResult = document.getElementById('widget-result');
+  const widgetName = document.getElementById('widget-name');
+  const widgetTemp = document.getElementById('widget-temp');
+  const widgetDesc = document.getElementById('widget-desc');
+
   const sandCheckBtn = document.getElementById('sand-check-btn');
   const sandPayBtn = document.getElementById('sand-pay-btn');
   const sandResult = document.getElementById('sand-result');
   const sandStatus = document.getElementById('sand-status');
   const sandRole = document.getElementById('sand-role');
   const sandData = document.getElementById('sand-data');
-  // ... (Keep other existing constants) ...
 
-  // 1. Updated: Verify Payment Status Button now triggers the server check
-  sandCheckBtn.addEventListener('click', function() {
-    checkPaymentSuccess();
+  const sandInfoLink = document.getElementById('sand-info-link');
+  const sandInfoOverlay = document.getElementById('sand-info-overlay');
+  const sandInfoClose = document.getElementById('sand-info-close');
+
+  sandInfoLink.addEventListener('click', function(event) {
+    event.preventDefault();
+    sandInfoOverlay.classList.remove('hidden');
   });
 
-  // 2. Stripe Checkout Payment Handler
+  function closeSandInfo() {
+    sandInfoOverlay.classList.add('hidden');
+  }
+
+  sandInfoClose.addEventListener('click', closeSandInfo);
+
+  sandInfoOverlay.addEventListener('click', function(event) {
+    if (event.target === sandInfoOverlay) closeSandInfo();
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && !sandInfoOverlay.classList.contains('hidden')) {
+      closeSandInfo();
+    }
+  });
+
+  themeBtn.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+  });
+
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const skillItems = document.querySelectorAll('.skill-item');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const targetFilter = btn.getAttribute('data-filter');
+      
+      skillItems.forEach(item => {
+        if (targetFilter === 'all' || item.classList.contains(targetFilter)) {
+          item.style.display = 'inline-block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  resumeForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const visitorName = visitorNameInput.value;
+    formFeedback.textContent = `Thank you, ${visitorName}! Your message has been sent. 🚀`;
+    formFeedback.classList.remove('hidden');
+    resumeForm.reset();
+  });
+
+  widgetSearchBtn.addEventListener('click', function() {
+    const city = widgetCityInput.value.trim();
+    if (city === "") {
+      alert("Please enter a city name first!");
+      return;
+    }
+    widgetSearchBtn.textContent = "⌛";
+    widgetSearchBtn.style.opacity = "0.7";
+
+    const url = `/weather?city=${encodeURIComponent(city)}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error(`Server returned status: ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        widgetName.textContent = `${data.name}, ${data.country}`;
+        widgetTemp.textContent = `${Math.round(data.temp)}°C`;
+        widgetDesc.textContent = data.description;
+        widgetResult.classList.remove('hidden');
+      })
+      .catch(error => {
+        alert(`Oops! ${error.message}`);
+        console.error(error);
+      })
+      .finally(() => {
+        widgetSearchBtn.textContent = "Go";
+        widgetSearchBtn.style.opacity = "1";
+      });
+  });
+
+  // Stripe Checkout Payment Handler
   sandPayBtn.addEventListener('click', async function() {
     sandPayBtn.textContent = "⌛ Creating checkout session...";
     sandPayBtn.disabled = true;
@@ -35,13 +129,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 3. Main Verification Function
-  async function checkPaymentSuccess() {
+  // Verify Payment Status Button handler
+  sandCheckBtn.addEventListener('click', function() {
+    checkPaymentSuccess(true);
+  });
+
+  // Main Verification Function
+  async function checkPaymentSuccess(isManual = false) {
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('session_id');
 
     if (!sessionId) {
-      alert("No session found. Please complete the payment first.");
+      if (isManual) {
+        alert("No session found. Please complete the payment first.");
+      }
       return;
     }
 
@@ -73,8 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Auto-check on page load
-  checkPaymentSuccess();
+  // Auto-check on page load (silent)
+  checkPaymentSuccess(false);
   
-  // ... (Keep the rest of your existing code for theme, filters, etc.) ...
 });
