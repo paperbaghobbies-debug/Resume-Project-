@@ -1,0 +1,151 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shane Blake — aspiring frontend developer. Portfolio featuring a responsive resume, live weather widget, and a real Stripe-verified access control demo.">
+  <title>Shane Blake - Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="theme-container">
+    <button id="theme-btn">🌙 Toggle Dark Mode</button>
+  </div>
+
+  <main class="resume-card" id="main-content">
+
+    <div class="left-column">
+      
+      <header class="resume-header">
+        <h1>Shane Blake</h1>
+        <p class="subtitle">Aspiring Frontend Developer</p>
+      </header>
+
+      <section class="skills-section" aria-labelledby="skills-heading">
+        <h2 id="skills-heading">My Skills</h2>
+        
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="tech">Tech</button>
+          <button class="filter-btn" data-filter="soft">Soft Skills</button>
+        </div>
+
+        <ul class="skills-list">
+          <li class="skill-item tech">HTML5 (Semantic & Accessible)</li>
+          <li class="skill-item tech">CSS3 (Layouts & Design)</li>
+          <li class="skill-item tech">JavaScript (DOM, Fetch API & Async Logic)</li>
+          
+          <li class="skill-item tech">Stripe Payment Backend APIs</li>
+          <li class="skill-item tech">Secure Webhook Handling & Integration</li>
+
+          <li class="skill-item tech">Bubble.io (Visual Development & DB Architecture)</li>
+          <li class="skill-item tech">Bubble Workflows & Custom Logic</li>
+          <li class="skill-item tech">Bubble API Connector & Integrations</li>
+          
+          <li class="skill-item tech">Relational Database Design (Clinics, Inspectors & Reports)</li>
+          <li class="skill-item tech">Data Security & Privacy (GDPR Compliance)</li>
+          <li class="skill-item tech">Role-Based Access Control (RBAC Dashboard Permissions)</li>
+          
+          <li class="skill-item soft">Problem Solving</li>
+          <li class="skill-item soft">Eager Learner</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="right-column">
+      <section id="projects-section" aria-labelledby="projects-heading">
+        <h2 id="projects-heading">Featured Projects</h2>
+        <div class="projects-grid">
+          
+          <div class="project-card">
+            <h3><span aria-hidden="true">📂</span> Personal Portfolio</h3>
+            <p>A responsive digital resume card built with HTML, CSS, and JavaScript featuring a dynamic dark mode toggle.</p>
+            <a href="#" class="project-link">View Code &rarr;</a>
+          </div>
+
+          <div class="project-card">
+            <h3><span aria-hidden="true">🌤️</span> Live Weather Widget</h3>
+            <p>An interactive web application that fetches real-time weather data utilizing a third-party API service.</p>
+            
+            <div class="weather-search">
+              <input type="text" id="widget-city" placeholder="Enter city..." class="widget-input">
+              <button id="widget-search-btn" class="widget-button">Go</button>
+            </div>
+
+            <div id="widget-result" class="hidden">
+              <p><strong>Location:</strong> <span id="widget-name">-</span></p>
+              <p><strong>Temp:</strong> <span id="widget-temp">-</span></p>
+              <p><strong>Condition:</strong> <span id="widget-desc">-</span></p>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h3><span aria-hidden="true">🔒</span> Secure Payment & Access Control Demo</h3>
+            <p>A real Stripe integration where payment safely unlocks access. <a href="#" id="sand-info-link">How it works &rarr;</a></p>
+            
+            <div class="sandbox-controls">
+              <button id="sand-pay-btn" class="sand-btn-pay">Test Stripe Webhook Payment</button>
+              <button id="sand-check-btn" class="sand-btn-check">Verify Payment Status</button>
+            </div>
+
+            <div id="sand-result" class="hidden">
+              <p><strong>Gateway Status:</strong> <span id="sand-status">Locked</span></p>
+              <p><strong>Active Tier:</strong> <span id="sand-role">Free_User</span></p>
+              <p><strong>DB Payload:</strong> <span id="sand-data">Access Denied</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="contact-section" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Say hello!!</h2>
+      <form id="resume-form">
+        <label for="visitor-name">Name:</label>
+        <input type="text" id="visitor-name" required placeholder="Jane Doe">
+        
+        <button type="submit">Send Hello!</button>
+        <p id="form-feedback" class="hidden"></p>
+      </form>
+    </section>
+
+  </main>
+
+  <div id="sand-info-overlay" class="modal-overlay hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="sand-info-title">
+      <div class="modal-header">
+        <h3 id="sand-info-title">🔒 How this sandbox actually works</h3>
+        <button id="sand-info-close" class="modal-close" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p>This isn't a fake demo — it's a real, live payment flow running in Stripe's <strong>test mode</strong>. No real money is ever involved, no matter who clicks it.</p>
+
+        <h4>What's actually happening</h4>
+        <ol>
+          <li><strong>"Test Stripe Webhook Payment"</strong> calls a serverless function that creates a genuine Stripe Checkout Session.</li>
+          <li>You're redirected to Stripe's real hosted checkout page.</li>
+          <li>After payment, Stripe independently calls a <strong>webhook</strong> — a server-to-server request your browser never sees — to confirm the payment happened.</li>
+          <li>That webhook is cryptographically <strong>signature-verified</strong>, so it can't be spoofed.</li>
+          <li>Only after that server-side confirmation does the "Premium Inspector" role get unlocked. Editing the URL or browser state can't fake this.</li>
+        </ol>
+
+        <h4>Try it yourself</h4>
+        <p>Click <strong>"Test Stripe Webhook Payment"</strong> and use Stripe's official test card:</p>
+        <ul class="test-card-list">
+          <li><strong>Card number:</strong> 4242 4242 4242 4242</li>
+          <li><strong>Expiry:</strong> any future date (e.g. 12/30)</li>
+          <li><strong>CVC:</strong> any 3 digits</li>
+          <li><strong>ZIP:</strong> any 5 digits</li>
+        </ul>
+        <p>After paying, you'll be redirected back here and should see <strong>"Authorized via Stripe"</strong> within a couple of seconds. Click <strong>"Verify Payment Status"</strong> afterward to re-check your access level anytime.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

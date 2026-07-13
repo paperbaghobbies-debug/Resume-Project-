@@ -1,0 +1,15 @@
+{
+  "name": "resume-project",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "stripe": "latest"
+  },
+  "devDependencies": {
+    "vitest": "latest"
+  }
+}
