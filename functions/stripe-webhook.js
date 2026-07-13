@@ -28,22 +28,35 @@ export async function onRequestPost(context) {
       env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
+    console.error("Webhook signature verification failed:", err.message);
     return new Response(`Webhook signature verification failed: ${err.message}`, {
       status: 400,
     });
   }
 
+  // Debug: Log the incoming event type
+  console.log("Webhook received event type:", stripeEvent.type);
+
   if (stripeEvent.type === 'checkout.session.completed') {
     const session = stripeEvent.data.object;
 
-    await env.SESSIONS.put(
-      session.id,
-      JSON.stringify({
-        status: 'paid',
-        role: 'Premium_Inspector',
-        paidAt: new Date().toISOString(),
-      })
-    );
+    // Debug: Log the ID being saved
+    console.log("Processing session ID for KV:", session.id);
+
+    try {
+      await env.SESSIONS.put(
+        session.id,
+        JSON.stringify({
+          status: 'paid',
+          role: 'Premium_Inspector',
+          paidAt: new Date().toISOString(),
+        })
+      );
+      console.log("Successfully saved session to KV!");
+    } catch (err) {
+      console.error("KV Put Error:", err.message);
+      return new Response(`KV Save failed: ${err.message}`, { status: 500 });
+    }
   }
 
   return new Response(JSON.stringify({ received: true }), {
