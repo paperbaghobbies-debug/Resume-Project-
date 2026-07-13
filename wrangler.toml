@@ -1,0 +1,4 @@
+name = "resume-project" # 
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "3f6e7df4ce9c4205b72ff991eb274ada" 
