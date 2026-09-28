@@ -23,97 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const sandInfoOverlay = document.getElementById('sand-info-overlay');
   const sandInfoClose = document.getElementById('sand-info-close');
 
-  // Terminal DOM Elements
-  const cmdForm = document.getElementById('cmdForm');
-  const cmdInput = document.getElementById('cmdInput');
-  const terminalOutput = document.getElementById('terminalOutput');
-  const termNavBtns = document.querySelectorAll('.term-nav-btn');
-
-  // Terminal Response Commands
-  const commands = {
-    help: `Available commands:
-• <span style="color: #38bdf8;">summary</span>   - View candidate introduction & background
-• <span style="color: #38bdf8;">freelance</span> - Learn about recent web development projects
-• <span style="color: #38bdf8;">projects</span>  - List major application highlights
-• <span style="color: #38bdf8;">skills</span>    - View core technical stack
-• <span style="color: #38bdf8;">clear</span>     - Clear terminal output screen`,
-    
-    summary: `<strong style="color: #38bdf8;">SUMMARY:</strong>
-Shane Blake — Aspiring Frontend Developer & Web Application Student.
-Specializing in standard-compliant, accessible HTML/CSS, Vanilla JavaScript, and Cloudflare Pages workflows.`,
-
-    freelance: `<strong style="color: #38bdf8;">FREELANCE EXPERIENCE:</strong>
-• Custom responsive client portfolio sites (HTML5, CSS Grid, Flexbox)
-• Web application integration & lightweight serverless logic
-• Performance optimizations & accessibility compliance`,
-
-    projects: `<strong style="color: #38bdf8;">PROJECT HIGHLIGHTS:</strong>
-1. Interactive CV Terminal (DOM Manipulation & Custom Command Engine)
-2. Live Weather Widget (Fetch API & Serverless Endpoint Integration)
-3. Stripe Access Control Demo (Webhook Verification & Role-Based Access)`,
-
-    skills: `<strong style="color: #38bdf8;">CORE SKILLS:</strong>
-• Frontend: HTML5, CSS3, JavaScript (DOM / Async / Fetch)
-• Hosting & Backend: Cloudflare Pages, Workers KV, Stripe APIs
-• Tooling & Architecture: Git, GitHub Actions, GDPR Compliance`
-  };
-
-  // Terminal Command Execution Logic
-  function processCommand(rawInput) {
-    // Strip surrounding quotes or spaces if typed (e.g., 'help' -> help)
-    const cleanCmd = rawInput.trim().replace(/^['"]|['"]$/g, '').toLowerCase();
-
-    if (!cleanCmd) return;
-
-    if (cleanCmd === 'clear') {
-      terminalOutput.innerHTML = '';
-      return;
-    }
-
-    // Echo user typed line
-    const userLine = document.createElement('div');
-    userLine.className = 'output-line';
-    userLine.innerHTML = `<span style="color: #4ade80;">shane@dev:~$</span> ${escapeHtml(rawInput)}`;
-    terminalOutput.appendChild(userLine);
-
-    // Print command output or error message
-    const responseLine = document.createElement('div');
-    responseLine.className = 'output-line';
-
-    if (commands[cleanCmd]) {
-      responseLine.innerHTML = commands[cleanCmd];
-    } else {
-      responseLine.innerHTML = `Command not recognized: '<span style="color: #f87171;">${escapeHtml(rawInput)}</span>'. Type <span style="color: #4ade80;">'help'</span> for options.`;
-    }
-
-    terminalOutput.appendChild(responseLine);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-  }
-
-  // Helper to safely render user input
-  function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-  }
-
-  // Event Listener: Form submit handles Enter key press
-  if (cmdForm) {
-    cmdForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const inputVal = cmdInput.value;
-      processCommand(inputVal);
-      cmdInput.value = '';
-    });
-  }
-
-  // Event Listener: Quick Action Nav Buttons
-  termNavBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const cmd = btn.getAttribute('data-cmd');
-      processCommand(cmd);
-    });
-  });
-
-  // Modal Handlers
   sandInfoLink.addEventListener('click', function(event) {
     event.preventDefault();
     sandInfoOverlay.classList.remove('hidden');
@@ -135,12 +44,10 @@ Specializing in standard-compliant, accessible HTML/CSS, Vanilla JavaScript, and
     }
   });
 
-  // Dark Mode Toggle
   themeBtn.addEventListener('click', function() {
     document.body.classList.toggle('dark');
   });
 
-  // Skills Filtering
   const filterButtons = document.querySelectorAll('.filter-btn');
   const skillItems = document.querySelectorAll('.skill-item');
 
@@ -161,7 +68,6 @@ Specializing in standard-compliant, accessible HTML/CSS, Vanilla JavaScript, and
     });
   });
 
-  // Resume Form Submission Handler
   resumeForm.addEventListener('submit', function(event) {
     event.preventDefault();
     const visitorName = visitorNameInput.value;
@@ -170,7 +76,6 @@ Specializing in standard-compliant, accessible HTML/CSS, Vanilla JavaScript, and
     resumeForm.reset();
   });
 
-  // Weather Widget Handler
   widgetSearchBtn.addEventListener('click', function() {
     const city = widgetCityInput.value.trim();
     if (city === "") {
