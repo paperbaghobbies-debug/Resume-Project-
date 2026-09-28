@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Shane Blake — aspiring frontend developer. Portfolio featuring a responsive resume, live weather widget, and a real Stripe-verified access control demo.">
+  <meta name="description" content="Shane Blake — aspiring frontend developer. Portfolio featuring a responsive resume, live weather widget, terminal CV widget, and a real Stripe-verified access control demo.">
   <title>Shane Blake - Portfolio</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -28,9 +28,9 @@
         <h2 id="skills-heading">My Skills</h2>
         
         <div class="filter-buttons">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="tech">Tech</button>
-          <button class="filter-btn" data-filter="soft">Soft Skills</button>
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-filter="tech" aria-pressed="false">Tech</button>
+          <button class="filter-btn" data-filter="soft" aria-pressed="false">Soft Skills</button>
         </div>
 
         <ul class="skills-list">
@@ -48,8 +48,6 @@
           <li class="skill-item tech">Bubble.io (Visual Development & DB Architecture)</li>
           <li class="skill-item tech">Bubble Workflows & Custom Logic</li>
           <li class="skill-item tech">Bubble API Connector & Integrations</li>
-          
-          <li class="skill-item tech">Relational Database Design (Clinics, Inspectors & Reports)</li>
           <li class="skill-item tech">Data Security & Privacy (GDPR Compliance)</li>
           <li class="skill-item tech">Role-Based Access Control (RBAC Dashboard Permissions)</li>
           
@@ -72,8 +70,45 @@
           
           <div class="project-card">
             <h3><span aria-hidden="true">📂</span> Personal Portfolio</h3>
-            <p>A responsive digital resume card built with HTML, CSS, and JavaScript featuring a dynamic dark mode toggle.</p>
-            <a href="#" class="project-link">View Code &rarr;</a>
+            <p>A responsive digital resume card built with HTML, CSS, and JavaScript featuring a dynamic dark mode toggle. <a href="#" class="project-link">View Code &rarr;</a></p>
+          </div>
+
+          <!-- NEW INTERACTIVE TERMINAL WIDGET CARD -->
+          <div class="project-card terminal-card">
+            <h3><span aria-hidden="true">💻</span> Interactive CV Terminal</h3>
+            <p>Type commands or click quick-actions to explore my career history and technical capabilities.</p>
+            
+            <div class="terminal-widget">
+              <div class="terminal-header">
+                <div class="window-controls">
+                  <span class="control-btn btn-close"></span>
+                  <span class="control-btn btn-minimize"></span>
+                  <span class="control-btn btn-maximize"></span>
+                </div>
+                <div class="terminal-title">shane-blake-cv.js</div>
+                <div></div>
+              </div>
+
+              <div class="nav-buttons">
+                <button type="button" class="term-nav-btn" data-cmd="summary">Summary</button>
+                <button type="button" class="term-nav-btn" data-cmd="freelance">Freelance</button>
+                <button type="button" class="term-nav-btn" data-cmd="projects">Projects</button>
+                <button type="button" class="term-nav-btn" data-cmd="skills">Skills</button>
+                <button type="button" class="term-nav-btn" data-cmd="clear">Clear</button>
+              </div>
+
+              <div class="terminal-body" id="terminalOutput">
+                <div class="output-line">
+                  Welcome to <span style="color: #38bdf8;">Shane Blake's Terminal CV</span> [v1.0].
+                  <br />Type <span style="color: #4ade80;">'help'</span> or click a button above to inspect my profile.
+                </div>
+              </div>
+
+              <div class="prompt-container">
+                <span class="prompt-symbol">shane@dev:~$</span>
+                <input type="text" id="cmdInput" class="cmd-input" placeholder="type 'help', 'skills'..." />
+              </div>
+            </div>
           </div>
 
           <div class="project-card">
@@ -85,7 +120,7 @@
               <button id="widget-search-btn" class="widget-button">Go</button>
             </div>
 
-            <div id="widget-result" class="hidden">
+            <div id="widget-result" class="hidden" role="status" aria-live="polite">
               <p><strong>Location:</strong> <span id="widget-name">-</span></p>
               <p><strong>Temp:</strong> <span id="widget-temp">-</span></p>
               <p><strong>Condition:</strong> <span id="widget-desc">-</span></p>
@@ -101,7 +136,7 @@
               <button id="sand-check-btn" class="sand-btn-check">Verify Payment Status</button>
             </div>
 
-            <div id="sand-result" class="hidden">
+            <div id="sand-result" class="hidden" role="status" aria-live="polite">
               <p><strong>Gateway Status:</strong> <span id="sand-status">Locked</span></p>
               <p><strong>Active Tier:</strong> <span id="sand-role">Free_User</span></p>
               <p><strong>DB Payload:</strong> <span id="sand-data">Access Denied</span></p>
@@ -118,7 +153,7 @@
         <input type="text" id="visitor-name" required placeholder="Jane Doe">
         
         <button type="submit">Send Hello!</button>
-        <p id="form-feedback" class="hidden"></p>
+        <p id="form-feedback" class="hidden" role="status" aria-live="polite"></p>
       </form>
     </section>
 
